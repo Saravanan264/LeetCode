@@ -34,7 +34,7 @@ class Solution {
                     q.add(cur.right);
                 }
             }
-            result.addFirst(res);
+            result.add(0,res);
         }
         return result;
     }
