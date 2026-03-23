@@ -13,48 +13,50 @@
  *     }
  * }
  */
-import java.util.*;
-
 class Solution {
-    class Tuple {
+
+    class Pair {
         TreeNode node;
-        int row;
-        int col;
-        Tuple(TreeNode node, int row, int col) {
+        int row, col;
+
+        Pair(TreeNode node, int row, int col) {
             this.node = node;
             this.row = row;
             this.col = col;
         }
     }
+
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        List<List<Integer>> result = new ArrayList<>();
+
         TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();
-        Queue<Tuple> queue = new LinkedList<>();
-        queue.offer(new Tuple(root, 0, 0));
-        while (!queue.isEmpty()) {
-            Tuple current = queue.poll();
-            TreeNode node = current.node;
-            int row = current.row;
-            int col = current.col;
-            map.putIfAbsent(col, new TreeMap<>());
-            map.get(col).putIfAbsent(row, new PriorityQueue<>());
-            map.get(col).get(row).offer(node.val);
-            if (node.left != null) {
-                queue.offer(new Tuple(node.left, row + 1, col - 1));
-            }
-            if (node.right != null) {
-                queue.offer(new Tuple(node.right, row + 1, col + 1));
-            }
+        Queue<Pair> q = new LinkedList<>();
+
+        q.offer(new Pair(root, 0, 0));
+
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+
+            map.putIfAbsent(p.col, new TreeMap<>());
+            map.get(p.col).putIfAbsent(p.row, new PriorityQueue<>());
+            map.get(p.col).get(p.row).offer(p.node.val);
+
+            if (p.node.left != null)
+                q.offer(new Pair(p.node.left, p.row + 1, p.col - 1));
+
+            if (p.node.right != null)
+                q.offer(new Pair(p.node.right, p.row + 1, p.col + 1));
         }
+
+        List<List<Integer>> res = new ArrayList<>();
+
         for (TreeMap<Integer, PriorityQueue<Integer>> rows : map.values()) {
             List<Integer> list = new ArrayList<>();
             for (PriorityQueue<Integer> pq : rows.values()) {
-                while (!pq.isEmpty()) {
-                    list.add(pq.poll());
-                }
+                while (!pq.isEmpty()) list.add(pq.poll());
             }
-            result.add(list);
+            res.add(list);
         }
-        return result;
+
+        return res;
     }
 }
