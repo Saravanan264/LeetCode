@@ -14,17 +14,17 @@
  * }
  */
 class Solution {
-    public int summa(int sum,TreeNode root){
+    public int fun(int sum,TreeNode root){
           if(root==null) return 0;
           sum=sum*10+root.val;
           if(root.left==null && root.right==null){
             return sum;
           }
-          return summa(sum,root.left) + summa(sum,root.right);
+          return fun(sum,root.left) + fun(sum,root.right);
     }
     public int sumNumbers(TreeNode root) {
         int sum=0;
-        sum=summa(sum,root);
+        sum=fun(sum,root);
         return sum;  
       
     }
